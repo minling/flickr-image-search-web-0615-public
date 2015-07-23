@@ -1,9 +1,36 @@
 $(document).ready(function(){
   
   //write your solution here...
+  $('#search').on('click', function(){
+    getSearchPhoto();
+  })
     
 });
 
+
+function getSearchPhoto(){
+    
+    var keyword = $('#keyword').val()
+    var flickrUrl = 'https://api.flickr.com/services/rest/?format=json&method=flickr.photos.search&api_key=2fd41b49fedfd589dc265350521ab539&tags='+ keyword +'&jsoncallback=?';
+
+    $.ajax({
+        url: flickrUrl,
+        keyword: $('#keyword').val(),
+        dataType: 'jsonp'
+    }).done(function(data){
+        // debugger
+        $.each( data.photos.photo, function(i, photo){
+            var farm = parseInt(photo.farm);
+            var server = parseInt(photo.server)
+            var id = parseInt(photo.id)
+            var secret = photo.secret
+            var imgurl = 'https://farm' + farm + '.staticflickr.com/' + server +'/'+ id +'_'+ secret +'.jpg'
+            $('#feed').append("<img src ='" + imgurl +"'>")
+            debugger;
+        })
+    })
+//https://farm{farm-id}.staticflickr.com/{server-id}/{id}_{secret}.jpg
+}
 /*
 
 API url: 
